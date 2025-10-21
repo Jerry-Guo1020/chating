@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>多人实时评论聊天室</title>
+<style>
+    body {
+  margin: 0;
+  font-family: "Microsoft YaHei", sans-serif;
+  background: #f5f6fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.chat-container {
+  width: 420px;
+  height: 620px;
+  background: #fff;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.chat-header {
+  padding: 14px 18px;
+  background: #f9f9fc;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 14px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.message.self {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #cfd3d8;
+}
+
+.bubble {
+  background: #f3f4f8;
+  padding: 10px 14px;
+  border-radius: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+  font-size: 14px;
+}
+
+.self .bubble {
+  background: #e8f1ff;
+}
+
+.meta {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #eee;
+  background: #fafafa;
+}
+
+.chat-input input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 10px;
+  outline: none;
+}
+
+.chat-input button {
+  margin-left: 8px;
+  background: #7b4fff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.chat-input button:hover {
+  background: #6536e8;
+}
+
+.system-msg {
+  font-size: 12px;
+  color: #888;
+  text-align: center;
+  margin: 6px 0;
+}
+
+</style>
+</head>
+<body>
+<div class="chat-container">
+  <div class="chat-header">
+    <h3>实时评论区</h3>
+    <span id="userCount">在线 0 人</span>
+  </div>
+
+  <div class="chat-messages" id="messages"></div>
+
+  <div class="chat-input">
+    <input id="input" placeholder="输入消息..." autocomplete="off" />
+    <button id="sendBtn">发送</button>
+  </div>
+</div>
+
+<script src="/server/index.js"></script>
+<script src="chat.js"></script>
+</body>
+
+</html>
