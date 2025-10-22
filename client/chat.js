@@ -1,14 +1,13 @@
 const socket = io();
 let selfId = null;
-let username = localStorage.getItem('username') || '';
+let username = localStorage.getItem('username') || '用户' + Math.floor(Math.random() * 1000);
 
-function askName() {
-  const name = prompt('请输入昵称：', username || '');
-  username = name?.trim() || '匿名用户';
+// 初始化用户
+function initUser() {
   localStorage.setItem('username', username);
   socket.emit('join', username);
 }
-askName();
+initUser();
 
 const messages = document.getElementById('messages');
 const input = document.getElementById('input');
@@ -36,13 +35,25 @@ function addMessage({ text, username, time, self = false, system = false }) {
   messages.scrollTop = messages.scrollHeight;
 }
 
-sendBtn.onclick = () => {
+// 发送消息
+function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
   socket.emit('chat message', { text });
   input.value = '';
-};
+}
 
+// 点击发送按钮
+sendBtn.onclick = sendMessage;
+
+// 按Enter键发送消息
+input.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    sendMessage();
+  }
+});
+
+// 接收服务器事件
 socket.on('joined', (data) => {
   selfId = data.id;
 });
@@ -61,4 +72,25 @@ socket.on('system message', (msg) => {
 
 socket.on('userlist', (list) => {
   userCount.textContent = `在线 ${list.length} 人`;
+});
+
+// 断线重连处理
+socket.on('disconnect', () => {
+  addMessage({ 
+    text: '连接已断开，正在尝试重新连接...', 
+    time: Date.now(),
+    system: true 
+  });
+});
+
+socket.on('connect', () => {
+  if (selfId) {
+    addMessage({ 
+      text: '已重新连接到服务器', 
+      time: Date.now(),
+      system: true 
+    });
+    // 重新加入聊天室
+    socket.emit('join', username);
+  }
 });
