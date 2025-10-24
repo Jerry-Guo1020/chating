@@ -1,227 +1,227 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>多人实时评论聊天室</title>
-<style>
-    body {
-  margin: 0;
-  font-family: "Microsoft YaHei", sans-serif;
-  background: #f5f6fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+  <!DOCTYPE html>
+  <html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>多人实时评论聊天室</title>
+  <style>
+      body {
+    margin: 0;
+    font-family: "Microsoft YaHei", sans-serif;
+    background: #f5f6fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
 
-.chat-container {
-  width: 420px;
-  height: 620px;
-  background: #fff;
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-}
+  .chat-container {
+    width: 420px;
+    height: 620px;
+    background: #fff;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
 
-.chat-header {
-  padding: 14px 18px;
-  background: #f9f9fc;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+  .chat-header {
+    padding: 14px 18px;
+    background: #f9f9fc;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-.chat-header h3 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-}
+  .chat-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
 
-.chat-messages {
-  flex: 1;
-  padding: 14px 16px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+  .chat-messages {
+    flex: 1;
+    padding: 14px 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 
-.message {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
+  .message {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
 
-.message.self {
-  flex-direction: row-reverse;
-}
+  .message.self {
+    flex-direction: row-reverse;
+  }
 
-.avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #cfd3d8;
-}
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #cfd3d8;
+  }
 
-.bubble {
-  background: #f3f4f8;
-  padding: 10px 14px;
-  border-radius: 10px;
-  max-width: 70%;
-  word-wrap: break-word;
-  font-size: 14px;
-}
+  .bubble {
+    background: #f3f4f8;
+    padding: 10px 14px;
+    border-radius: 10px;
+    max-width: 70%;
+    word-wrap: break-word;
+    font-size: 14px;
+  }
 
-.self .bubble {
-  background: #e8f1ff;
-}
+  .self .bubble {
+    background: #e8f1ff;
+  }
 
-.meta {
-  font-size: 11px;
-  color: #999;
-  margin-top: 4px;
-}
+  .meta {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+  }
 
-.chat-input {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid #eee;
-  background: #fafafa;
-}
+  .chat-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #eee;
+    background: #fafafa;
+  }
 
-.chat-input input {
-  flex: 1;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 8px 10px;
-  outline: none;
-}
+  .chat-input input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px 10px;
+    outline: none;
+  }
 
-.chat-input button {
-  margin-left: 8px;
-  background: #7b4fff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: 0.2s;
-}
+  .chat-input button {
+    margin-left: 8px;
+    background: #7b4fff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
 
-.chat-input button:hover {
-  background: #6536e8;
-}
+  .chat-input button:hover {
+    background: #6536e8;
+  }
 
-.system-msg {
-  font-size: 12px;
-  color: #888;
-  text-align: center;
-  margin: 6px 0;
-}
+  .system-msg {
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    margin: 6px 0;
+  }
 
-/* 用户名输入模态框样式 */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-.username-modal {
-  background: white;
-  border-radius: 10px;
-  padding: 30px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  animation: modalFadeIn 0.3s ease-out;
-}
-@keyframes modalFadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.username-modal h2 {
-  margin-bottom: 20px;
-  color: #7b4fff;
-}
-.username-input {
-  display: block;
-  margin: 0 auto 20px;
-  padding: 12px;
-  border: 2px solid #ddd;
-  border-radius: 6px;
-  font-size: 16px;
-  margin-bottom: 20px;
-  transition: border-color 0.3s;
-}
-.username-input:focus {
-  border-color: #7b4fff;
-  outline: none;
-}
-.join-btn {
-  background: #7b4fff;
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-.join-btn:hover {
-  background: #6536e8;
-}
-.hidden {
-  display: none;
-}
+  /* 用户名输入模态框样式 */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  .username-modal {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: modalFadeIn 0.3s ease-out;
+  }
+  @keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .username-modal h2 {
+    margin-bottom: 20px;
+    color: #7b4fff;
+  }
+  .username-input {
+    display: block;
+    margin: 0 auto 20px;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+  }
+  .username-input:focus {
+    border-color: #7b4fff;
+    outline: none;
+  }
+  .join-btn {
+    background: #7b4fff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .join-btn:hover {
+    background: #6536e8;
+  }
+  .hidden {
+    display: none;
+  }
 
-/* 晃动动画效果 */
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-  20%, 40%, 60%, 80% { transform: translateX(5px); }
-}
-.shake {
-  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-}
-</style>
-</head>
-<body>
-<!-- 用户名输入模态框 -->
-<div id="usernameModal" class="modal-overlay">
-  <div class="username-modal">
-    <h2>欢迎来到聊天室</h2>
-    <input type="text" id="usernameInput" class="username-input" placeholder="请输入你的昵称" maxlength="20" autofocus />
-    <button id="joinBtn" class="join-btn">加入聊天</button>
-  </div>
-</div>
-
-<div class="chat-container">
-  <div class="chat-header">
-    <h3>实时评论区</h3>
-    <span id="userCount">在线 0 人</span>
+  /* 晃动动画效果 */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+  }
+  .shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  </style>
+  </head>
+  <body>
+  <!-- 用户名输入模态框 -->
+  <div id="usernameModal" class="modal-overlay">
+    <div class="username-modal">
+      <h2>欢迎来到聊天室</h2>
+      <input type="text" id="usernameInput" class="username-input" placeholder="请输入你的昵称" maxlength="20" autofocus />
+      <button id="joinBtn" class="join-btn">加入聊天</button>
+    </div>
   </div>
 
-  <div class="chat-messages" id="messages"></div>
+  <div class="chat-container">
+    <div class="chat-header">
+      <h3>实时评论区</h3>
+      <span id="userCount">在线 0 人</span>
+    </div>
 
-  <div class="chat-input">
-    <input id="input" placeholder="输入消息..." autocomplete="off" />
-    <button id="sendBtn">发送</button>
+    <div class="chat-messages" id="messages"></div>
+
+    <div class="chat-input">
+      <input id="input" placeholder="输入消息..." autocomplete="off" />
+      <button id="sendBtn">发送</button>
+    </div>
   </div>
-</div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="chat.js"></script>
-</body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="chat.js"></script>
+  </body>
 
-</html>
+  </html>
