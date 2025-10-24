@@ -123,9 +123,89 @@
   margin: 6px 0;
 }
 
+/* 用户名输入模态框样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.username-modal {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: modalFadeIn 0.3s ease-out;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.username-modal h2 {
+  margin-bottom: 20px;
+  color: #7b4fff;
+}
+.username-input {
+  display: block;
+  margin: 0 auto 20px;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  transition: border-color 0.3s;
+}
+.username-input:focus {
+  border-color: #7b4fff;
+  outline: none;
+}
+.join-btn {
+  background: #7b4fff;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.join-btn:hover {
+  background: #6536e8;
+}
+.hidden {
+  display: none;
+}
+
+/* 晃动动画效果 */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+.shake {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
 </style>
 </head>
 <body>
+<!-- 用户名输入模态框 -->
+<div id="usernameModal" class="modal-overlay">
+  <div class="username-modal">
+    <h2>欢迎来到聊天室</h2>
+    <input type="text" id="usernameInput" class="username-input" placeholder="请输入你的昵称" maxlength="20" autofocus />
+    <button id="joinBtn" class="join-btn">加入聊天</button>
+  </div>
+</div>
+
 <div class="chat-container">
   <div class="chat-header">
     <h3>实时评论区</h3>

@@ -1,18 +1,60 @@
 const socket = io();
 let selfId = null;
-let username = localStorage.getItem('username') || '用户' + Math.floor(Math.random() * 1000);
+let username = localStorage.getItem('username') || '';
 
-// 初始化用户
-function initUser() {
-  localStorage.setItem('username', username);
-  socket.emit('join', username);
-}
-initUser();
-
+// DOM元素
 const messages = document.getElementById('messages');
 const input = document.getElementById('input');
 const sendBtn = document.getElementById('sendBtn');
 const userCount = document.getElementById('userCount');
+const usernameModal = document.getElementById('usernameModal');
+const usernameInput = document.getElementById('usernameInput');
+const joinBtn = document.getElementById('joinBtn');
+
+// 显示用户名输入模态框
+function showUsernameModal() {
+  usernameModal.classList.remove('hidden');
+  if (username) {
+    usernameInput.value = username;
+  }
+  usernameInput.focus();
+}
+
+// 隐藏用户名输入模态框
+function hideUsernameModal() {
+  usernameModal.classList.add('hidden');
+}
+
+// 加入聊天
+function joinChat() {
+  const inputName = usernameInput.value.trim();
+  if (inputName && inputName.length <= 5) {
+    username = inputName;
+    localStorage.setItem('username', username);
+    socket.emit('join', username);
+    hideUsernameModal();
+  } else if (!inputName) {
+    // 用户名为空
+    usernameInput.classList.add('shake');
+    setTimeout(() => usernameInput.classList.remove('shake'), 500);
+  } else {
+    // 用户名超过10个字符
+    alert('用户名最多只能5个字符！');
+    usernameInput.value = inputName.substring(0, 5); // 自动截取前10个字符
+    usernameInput.focus();
+  }
+}
+
+// 初始化事件监听
+joinBtn.addEventListener('click', joinChat);
+usernameInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    joinChat();
+  }
+});
+
+// 显示用户名输入模态框
+showUsernameModal();
 
 function addMessage({ text, username, time, self = false, system = false }) {
   if (system) {
